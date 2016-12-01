@@ -69,12 +69,20 @@ type VM struct {
 	VMCID             string   `json:"vm_cid"`
 	CID               string   `json:"cid"`
 	JobName           string   `json:"job_name"`
+	Job               string   `json:"job"`
 	Index             int      `json:"index"`
 	IPs               []string `json:"ips"`
 	DNS               []string `json:"dns"`
 	ResurectionPaused bool     `json:"resurrection_paused"`
 	Vitals            Vitals   `json:"vitals"`
 	ID                string   `json:"id"`
+}
+
+func (vm VM) Name() string {
+    if vm.JobName == "" {
+        return vm.Job
+    }
+    return vm.JobName
 }
 
 // VM Vitals struct
