@@ -202,6 +202,30 @@ func (c *Client) GetDeploymentVMs(name string) (vms []VM, err error) {
 	return
 }
 
+// GetDeploymentVMs from given BOSH in short format
+func (c *Client) GetDeploymentVMsShort(name string) (vms []VM, err error) {
+	r := c.NewRequest("GET", "/deployments/"+name+"/vms")
+	resp, err := c.DoRequest(r)
+
+	if err != nil {
+		log.Printf("Error requesting deployment vms %v", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	resBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("Error reading deployment vms request %v", resBody)
+		return
+	}
+	err = json.Unmarshal(resBody, &vms)
+	if err != nil {
+		log.Printf("Error unmarshaling vms %v", err)
+		return
+	}
+	return
+}
+
 // GetTasks from given BOSH
 func (c *Client) GetTasks() (tasks []Task, err error) {
 	r := c.NewRequest("GET", "/tasks")
